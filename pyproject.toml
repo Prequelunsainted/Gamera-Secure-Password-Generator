@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gamera-password-generator"
+version = "2.0.0"
+description = "Gerador de senhas e frases-senha seguras com interface moderna."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = ["customtkinter>=5.2", "pillow>=10.0"]
+
+[project.scripts]
+gamera = "gamera.__main__:main"
+
+[tool.setuptools]
+packages = ["gamera"]
+
+[tool.setuptools.package-data]
+gamera = ["assets/*.png"]
