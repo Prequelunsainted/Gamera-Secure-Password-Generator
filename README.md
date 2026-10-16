@@ -38,7 +38,7 @@ Baixe o **`Gamera.exe`** na página de [Releases](https://github.com/Prequelunsa
 
 Na pasta [`mobile/`](mobile) há uma versão do Gamera para celular, feita como **PWA**: instala na tela inicial, abre em tela cheia, funciona offline e usa o mesmo visual e a mesma lógica do app desktop.
 
-**Instalar:** abra o endereço do app no celular e
+**Instalar:** abra **<https://prequelunsainted.github.io/Gamera-Secure-Password-Generator/mobile/>** no celular e
 - **Android (Chrome):** menu ⋮ → *Instalar app* (ou toque no botão **Instalar** do próprio app);
 - **iPhone (Safari):** botão Compartilhar → *Adicionar à Tela de Início*.
 
