@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Gamera — Gerador de Senhas</title>
+  <meta name="description" content="Gerador de senhas e frases-senha seguras. Funciona offline e nada sai do seu aparelho.">
+  <meta name="theme-color" content="#F6F4FC" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0C0B14" media="(prefers-color-scheme: dark)">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Gamera">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <img class="logo" src="icons/icon-192.png" alt="" width="48" height="48">
+      <div class="title">
+        <h1>Gamera</h1>
+        <p>Gerador de senhas seguras</p>
+      </div>
+      <button id="install" class="btn small" type="button" hidden>Instalar</button>
+    </header>
+
+    <div class="seg" role="radiogroup" aria-label="Tipo de senha">
+      <label class="seg-item"><input type="radio" name="mode" value="password" checked><span>Senha</span></label>
+      <label class="seg-item"><input type="radio" name="mode" value="passphrase"><span>Frase-senha</span></label>
+    </div>
+
+    <section class="card" aria-label="Resultado">
+      <div class="password" id="output" role="group" aria-label="Senha gerada">
+        <div class="pw-text" id="pw-text"></div>
+      </div>
+
+      <div class="meter" id="meter" role="meter" aria-label="Força da senha" aria-valuemin="0" aria-valuemax="128" aria-valuenow="0">
+        <div class="meter-fill" id="meter-fill"></div>
+      </div>
+      <p class="strength"><strong id="strength-label"></strong> <span id="strength-bits" class="muted"></span></p>
+      <p class="muted small-text" id="crack"></p>
+      <p class="error" id="error" role="alert"></p>
+
+      <div class="actions">
+        <button id="copy" class="btn primary" type="button">Copiar</button>
+        <button id="generate" class="btn" type="button">↻ Gerar</button>
+        <button id="toggle-visible" class="btn" type="button" aria-pressed="false">Ocultar</button>
+      </div>
+      <p class="muted small-text hint" id="hint" aria-hidden="true"></p>
+    </section>
+
+    <section class="card" id="password-options" aria-label="Opções da senha">
+      <div class="field-head">
+        <label class="section-label" for="length">Tamanho</label>
+        <output class="value" id="length-value" for="length">16</output>
+      </div>
+      <input class="range" id="length" type="range" min="4" max="64" step="1" value="16">
+
+      <h2 class="section-label">Caracteres</h2>
+      <label class="row"><span>Maiúsculas <small>A–Z</small></span><input class="switch" id="uppercase" type="checkbox" role="switch"></label>
+      <label class="row"><span>Minúsculas <small>a–z</small></span><input class="switch" id="lowercase" type="checkbox" role="switch"></label>
+      <label class="row"><span>Números <small>0–9</small></span><input class="switch" id="digits" type="checkbox" role="switch"></label>
+      <label class="row"><span>Símbolos <small>!@#</small></span><input class="switch" id="symbols" type="checkbox" role="switch"></label>
+      <label class="row"><span>Evitar parecidos <small>Il1O0</small></span><input class="switch" id="exclude-ambiguous" type="checkbox" role="switch"></label>
+
+      <label class="section-label" for="exclude">Nunca usar estes caracteres</label>
+      <input class="text" id="exclude" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="40">
+    </section>
+
+    <section class="card" id="passphrase-options" aria-label="Opções da frase-senha" hidden>
+      <div class="field-head">
+        <label class="section-label" for="words">Palavras</label>
+        <output class="value" id="words-value" for="words">6</output>
+      </div>
+      <input class="range" id="words" type="range" min="3" max="12" step="1" value="6">
+
+      <h2 class="section-label" id="separator-label">Separador</h2>
+      <div class="seg" role="radiogroup" aria-labelledby="separator-label">
+        <label class="seg-item"><input type="radio" name="separator" value="-" checked><span>-</span></label>
+        <label class="seg-item"><input type="radio" name="separator" value="."><span>.</span></label>
+        <label class="seg-item"><input type="radio" name="separator" value="_"><span>_</span></label>
+        <label class="seg-item"><input type="radio" name="separator" value=" "><span>espaço</span></label>
+      </div>
+
+      <label class="row"><span>Iniciais maiúsculas</span><input class="switch" id="capitalize" type="checkbox" role="switch"></label>
+      <label class="row"><span>Incluir um número</span><input class="switch" id="include-number" type="checkbox" role="switch"></label>
+      <p class="muted small-text">Frases-senha são fáceis de lembrar e de digitar, e continuam fortes com 6 ou mais palavras.</p>
+    </section>
+
+    <section class="card" aria-label="Histórico">
+      <div class="field-head">
+        <h2 class="section-label">Copiadas recentemente</h2>
+        <button id="clear-history" class="link" type="button">Limpar</button>
+      </div>
+      <ul class="history" id="history"></ul>
+    </section>
+
+    <footer class="card foot">
+      <h2 class="section-label" id="appearance-label">Aparência</h2>
+      <div class="seg" role="radiogroup" aria-labelledby="appearance-label">
+        <label class="seg-item"><input type="radio" name="appearance" value="light"><span>Claro</span></label>
+        <label class="seg-item"><input type="radio" name="appearance" value="dark"><span>Escuro</span></label>
+        <label class="seg-item"><input type="radio" name="appearance" value="auto" checked><span>Sistema</span></label>
+      </div>
+
+      <details>
+        <summary>Como instalar no celular</summary>
+        <p><strong>Android (Chrome):</strong> menu ⋮ → <em>Instalar app</em> ou <em>Adicionar à tela inicial</em>.</p>
+        <p><strong>iPhone (Safari):</strong> botão Compartilhar → <em>Adicionar à Tela de Início</em>.</p>
+      </details>
+
+      <p class="muted small-text">Tudo acontece no seu aparelho: nenhuma senha sai dele nem fica salva. Funciona offline. <span id="version"></span></p>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+    <span id="toast-text"></span>
+    <button id="toast-action" class="toast-action" type="button" hidden></button>
+  </div>
+</body>
+</html>

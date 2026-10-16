@@ -34,6 +34,32 @@ Baixe o **`Gamera.exe`** na página de [Releases](https://github.com/Prequelunsa
 
 > Como o executável não é assinado digitalmente, o Windows SmartScreen pode exibir um aviso na primeira execução. Clique em **Mais informações → Executar assim mesmo**.
 
+## 📱 Versão mobile (Android e iPhone)
+
+Na pasta [`mobile/`](mobile) há uma versão do Gamera para celular, feita como **PWA**: instala na tela inicial, abre em tela cheia, funciona offline e usa o mesmo visual e a mesma lógica do app desktop.
+
+**Instalar:** abra o endereço do app no celular e
+- **Android (Chrome):** menu ⋮ → *Instalar app* (ou toque no botão **Instalar** do próprio app);
+- **iPhone (Safari):** botão Compartilhar → *Adicionar à Tela de Início*.
+
+Recursos: modo senha e frase-senha, medidor de força, tema claro/escuro, histórico só na memória, mostrar/ocultar e limpeza da área de transferência 30 s após copiar. Se você sair do app depois de copiar, ele pergunta antes de limpar, para não apagar algo que você copiou depois. As preferências ficam só no aparelho e **senhas nunca são gravadas**.
+
+Para testar no computador:
+
+```bash
+python -m http.server 8000 --directory mobile
+# abra http://localhost:8000
+```
+
+Testes do núcleo JavaScript (precisa do Node 18+; também rodam abrindo `mobile/tests.html` no navegador):
+
+```bash
+cd mobile
+npm test
+```
+
+> A lista de palavras da versão mobile (`mobile/wordlist.js`) vem de `gamera/wordlist.py`. Se alterar uma, regenere a outra. Ao publicar uma nova versão, troque o número em `mobile/sw.js` (`CACHE`) para o celular baixar a atualização.
+
 ## 📦 Instalação a partir do código
 
 ```bash
@@ -94,7 +120,8 @@ gamera/
 ├── wordlist.py    # palavras em português para frases-senha
 ├── __main__.py    # ponto de entrada e linha de comando
 └── assets/gamera.png
-tests/test_core.py # testes automatizados
+mobile/            # versão PWA para Android e iPhone (core.js, app.js, sw.js...)
+tests/test_core.py # testes automatizados (Python)
 build_exe.py       # gera o Gamera.exe com PyInstaller
 ```
 
